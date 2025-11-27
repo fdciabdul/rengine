@@ -112,7 +112,7 @@ services:
       - tool_config:/root/.config
       - static_volume:/usr/src/app/staticfiles/
     ports:
-      - "127.0.0.1:8000:8000"
+      - "8080:8000"
     depends_on:
       - db
       - celery
@@ -121,22 +121,6 @@ services:
       rengine_network:
         aliases:
           - rengine
-
-  proxy:
-    restart: always
-    image: nginx:alpine
-    ports:
-      - 8080:8080/tcp
-    depends_on:
-      - web
-      - db
-      - redis
-    volumes:
-      - ./config/nginx/rengine.conf:/etc/nginx/conf.d/rengine.conf:ro
-      - static_volume:/usr/src/app/staticfiles/
-      - scan_results:/usr/src/scan_results
-    networks:
-      - rengine_network
   ollama:
     image: ollama/ollama
     container_name: ollama
